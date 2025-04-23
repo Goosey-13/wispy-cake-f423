@@ -5,46 +5,163 @@ import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 ---
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Under Construction</title>
+  <style>
+    body { margin: 0; overflow: hidden; background: #0a0a0a; }
+    canvas { display: block; }
+    #message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #00ffcc;
+      font-family: 'Arial', sans-serif;
+      font-size: 2.5em;
+      text-align: center;
+      text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div id="message">Under Construction<br>Connecting the Globe!</div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    // Set up scene
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Create globe with texture and city lights
+    const geometry = new THREE.SphereGeometry(2, 32, 32);
+    const textureLoader = new THREE.TextureLoader();
+    const earthTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg');
+    const cityLightsTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_lights_2048.jpg');
+    const material = new THREE.MeshBasicMaterial({
+      map: earthTexture,
+      emissiveMap: cityLightsTexture,
+      emissive: 0x00ffcc, // Neon cyan glow
+      emissiveIntensity: 0.5,
+      transparent: true,
+      opacity: 0.8
+    });
+    const globe = new THREE.Mesh(geometry, material);
+    scene.add(globe);
+
+    // Add wireframe overlay
+    const wireframeGeometry = new THREE.SphereGeometry(2.01, 32, 32);
+    const wireframeMaterial = new THREE.MeshBasicMaterial({
+      color: 0x00ffcc,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.2
+    });
+    const wireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
+    scene.add(wireframe);
+
+    // Add company logo
+    const logoTexture = textureLoader.load('https://via.placeholder.com/256x256.png?text=Your+Logo'); // Replace with your logo URL or local file
+    const logoMaterial = new THREE.SpriteMaterial({
+      map: logoTexture,
+      transparent: true,
+      color: 0xffffff
+    });
+    const logoSprite = new THREE.Sprite(logoMaterial);
+    logoSprite.position.set(0, 3, 0); // Above the globe
+    logoSprite.scale.set(2, 2, 1); // Adjust size
+    scene.add(logoSprite);
+
+    // Glowing outline effect (simulated with a second sprite)
+    const glowMaterial = new THREE.SpriteMaterial({
+      map: logoTexture,
+      transparent: true,
+      color: 0x00ffcc,
+      opacity: 0.5
+    });
+    const glowSprite = new THREE.Sprite(glowMaterial);
+    glowSprite.position.set(0, 3, 0);
+    glowSprite.scale.set(2.2, 2.2, 1); // Slightly larger for glow effect
+    scene.add(glowSprite);
+
+    // Add data connection lines
+    const connections = [];
+    const numConnections = 3;
+    function createConnection() {
+      const phi1 = Math.random() * Math.PI * 2;
+      const theta1 = Math.acos(2 * Math.random() - 1);
+      const phi2 = Math.random() * Math.PI * 2;
+      const theta2 = Math.acos(2 * Math.random() - 1);
+
+      const start = new THREE.Vector3(
+        2 * Math.sin(theta1) * Math.cos(phi1),
+        2 * Math.sin(theta1) * Math.sin(phi1),
+        2 * Math.cos(theta1)
+      );
+      const end = new THREE.Vector3(
+        2 * Math.sin(theta2) * Math.cos(phi2),
+        2 * Math.sin(theta2) * Math.sin(phi2),
+        2 * Math.cos(theta2)
+      );
+
+      const curve = new THREE.QuadraticBezierCurve3(
+        start,
+        new THREE.Vector3().lerpVectors(start, end, 0.5).multiplyScalar(1.5),
+        end
+      );
+      const points = curve.getPoints(50);
+      const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+      const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ffcc, transparent: true, opacity: 0.4 });
+      const line = new THREE.Line(lineGeometry, lineMaterial);
+      scene.add(line);
+      return { line, opacity: 0.4, fade: -0.004 };
+    }
+
+    for (let i = 0; i < numConnections; i++) {
+      connections.push(createConnection());
+    }
+
+    camera.position.z = 5;
+
+    // Animation loop
+    let time = 0;
+    function animate() {
+      requestAnimationFrame(animate);
+      globe.rotation.y += 0.005;
+      wireframe.rotation.y += 0.005;
+
+      // Animate logo
+      logoSprite.scale.set(2 + 0.1 * Math.sin(time), 2 + 0.1 * Math.sin(time), 1); // Pulsing effect
+      glowSprite.scale.set(2.2 + 0.1 * Math.sin(time), 2.2 + 0.1 * Math.sin(time), 1);
+
+      // Update connections
+      time += 0.05;
+      connections.forEach((conn, index) => {
+        conn.opacity += conn.fade;
+        if (conn.opacity <= 0 || conn.opacity >= 0.4) conn.fade = -conn.fade;
+        conn.line.material.opacity = conn.opacity;
+        if (conn.opacity <= 0) {
+          scene.remove(conn.line);
+          connections[index] = createConnection();
+        }
+      });
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
 </html>
