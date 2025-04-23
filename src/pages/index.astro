@@ -42,7 +42,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
     // Create globe with texture and city lights
     const geometry = new THREE.SphereGeometry(2, 32, 32);
     const textureLoader = new THREE.TextureLoader();
-    const earthTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg');
+    const earthTexture = textureLoader.load('/src/images/earth_atmos_2048.jpg');
     const cityLightsTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_lights_2048.jpg');
     const material = new THREE.MeshBasicMaterial({
       map: earthTexture,
